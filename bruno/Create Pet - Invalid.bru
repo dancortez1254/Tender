@@ -1,0 +1,23 @@
+meta {
+  name: Create Pet - Invalid
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:9812/pets
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "name": "",
+    "species": "unicorn"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

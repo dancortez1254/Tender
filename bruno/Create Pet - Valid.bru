@@ -1,15 +1,23 @@
 meta {
-  name: post
+  name: Create Pet - Valid
   type: http
   seq: 1
 }
 
 post {
   url: http://localhost:9812/pets
-  body: none
+  body: json
   auth: inherit
+}
+
+body:json {
+  {
+    "name": "bob",
+    "species": "rock"
+  }
 }
 
 settings {
   encodeUrl: true
+  timeout: 0
 }

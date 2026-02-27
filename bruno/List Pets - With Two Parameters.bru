@@ -1,0 +1,21 @@
+meta {
+  name: List Pets - With Two Parameters
+  type: http
+  seq: 4
+}
+
+get {
+  url: http://localhost:9812/pets?species=rock&minhappiness=40
+  body: none
+  auth: inherit
+}
+
+params:query {
+  species: rock
+  minhappiness: 40
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

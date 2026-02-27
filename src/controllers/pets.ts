@@ -10,11 +10,17 @@ import {
   UpdatePetNameParamSchema
 } from '../validators/pets.js';
 
-function getStage(pet: Pet){
-  if(differenceInMilliseconds(new Date(), pet.lastFedAt) > NEGLECT_THRESHOLD_MS){
-    return ["cooked", "🍗"];
+export function getStage(pet: Pet, include_emoji=true){
+  if(include_emoji === true){
+    if(differenceInMilliseconds(new Date(), pet.lastFedAt) > NEGLECT_THRESHOLD_MS){
+      return ["cooked", "🍗"];
+    }
+    return ["Egg", "🥚"];
   }
-  return ["Egg", "🥚"]
+  if(differenceInMilliseconds(new Date(), pet.lastFedAt) > NEGLECT_THRESHOLD_MS){
+    return ["cooked"];
+  }
+  return ["Egg"];
 }
 
 export function createPet(req: Request, res: Response): void {
@@ -34,9 +40,9 @@ export function createPet(req: Request, res: Response): void {
     energy: 50,
     lastFedAt: new Date(),
   };
-
+  const [stage, stageEmoji] = getStage(newPet);
   pets.push(newPet);
-  res.status(201).json(newPet);
+  res.status(201).json({ newPet, "stage": stage, "stageEmoji": stageEmoji });
 }
 
 export function listPets(req: Request, res: Response): void{

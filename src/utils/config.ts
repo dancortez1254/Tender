@@ -1,1 +1,1 @@
-export const NEGLECT_THRESHOLD_MS = 1000 * 30
+export const NEGLECT_THRESHOLD_MS = 1000 * 60 * 5

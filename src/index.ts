@@ -22,6 +22,12 @@ app.put('/pets/:petID', updatePetName);
 import { deletePet } from './controllers/pets.js';
 app.delete('/pets/:petID', deletePet);
 
+import { createHabit } from './controllers/habits.js';
+app.post('/pets/:petID/habits', createHabit);
+
+import { listHabits } from './controllers/habits.js';
+app.get('/pets/:petID/habits', listHabits);
+
 // --- Your routes will go above this line ---
 
 const PORT = process.env.PORT;
