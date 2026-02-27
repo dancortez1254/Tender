@@ -1,0 +1,22 @@
+meta {
+  name: Update Pet Name
+  type: http
+  seq: 10
+}
+
+put {
+  url: http://localhost:9812/pets/1
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "newName": "walter"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

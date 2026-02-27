@@ -1,7 +1,7 @@
 export type Log = {
   id: number;
-  petID: number;
-  habitID: number;
+  petId: number;
+  habitId: number;
   date: string;
   note: string;
 };

@@ -1,8 +1,8 @@
 export type Habit = {
   id: number;
-  petID: number;
+  petId: number;
   name: string;
   category: 'health' | 'fitness' | 'mindfulness' | 'learning' | 'social';
   targetFrequency: number;
-  statboost: 'happiness' | 'hunger' | 'energy';
+  statBoost: 'happiness' | 'hunger' | 'energy';
 };

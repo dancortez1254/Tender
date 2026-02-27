@@ -14,11 +14,11 @@ export const GetPetSchema = z.object({
 
 export type GetPet = z.infer<typeof GetPetSchema>
 
-export const GetPetIDSchema = z.object({
-  petID: z.string().transform(Number)
+export const GetPetIdSchema = z.object({
+  petId: z.string().transform(Number)
 });
 
-export type GetPetID = z.infer<typeof GetPetIDSchema>
+export type GetPetId = z.infer<typeof GetPetIdSchema>
 
 export const UpdatePetNameBodySchema = z.object({
   newName: z.string().min(1, 'Name is required').max(20, 'Name must be 20 characters or less'),
@@ -27,13 +27,13 @@ export const UpdatePetNameBodySchema = z.object({
 export type UdpatePetNameBody = z.infer<typeof UpdatePetNameBodySchema>
 
 export const UpdatePetNameParamSchema = z.object({
-  petID: z.string().transform(Number)
+  petId: z.string().transform(Number)
 });
 
 export type UpdatePetNameParam = z.infer<typeof UpdatePetNameParamSchema>
 
 export const DeletePetSchema = z.object({
-  petID: z.string().transform(Number)
+  petId: z.string().transform(Number)
 });
 
 export type DeletePet = z.infer<typeof DeletePetSchema>

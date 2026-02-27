@@ -4,20 +4,22 @@ import { Pet } from '../entities/Pet.js';
 import { habits, habitsIdCounter } from '../models/habits.js';
 import { pets } from '../models/pets.js';
 import {
-  CreatHabitSchema,
+  CreatHabitBodySchema,
+  CreateHabitParamSchema,
   ListHabitsParamSchema, ListHabitsQuerySchema
 } from '../validators/habits.js';
 import { getStage } from './pets.js';
 
 export function createHabit(req: Request, res: Response): void {
-  const result = CreatHabitSchema.safeParse(req.body);
+  const paramResult = CreateHabitParamSchema.safeParse(req.params);
+  const bodyResult = CreatHabitBodySchema.safeParse(req.body);
 
-  if(!result.success){
-    res.status(400).json({ error: result.error });
+  if(!bodyResult.success){
+    res.status(400).json({ error: bodyResult.error });
     return;
   }
 
-  const foundPet: Pet | undefined = pets.find(pet => pet.id === result.data.petID);
+  const foundPet: Pet | undefined = pets.find(pet => pet.id === paramResult.data.petId!);
   
   if(!foundPet){
     res.status(404).json({ "message": "Pet not found" });
@@ -32,11 +34,11 @@ export function createHabit(req: Request, res: Response): void {
   
   const newHabit: Habit = {
     id: habitsIdCounter.value++,
-    petID: result.data.petID,
-    name: result.data.name,
-    category: result.data.category,
-    targetFrequency: result.data.targetFrequency,
-    statboost: result.data.statBoost
+    petId: paramResult.data.petId,
+    name: bodyResult.data.name,
+    category: bodyResult.data.category,
+    targetFrequency: bodyResult.data.targetFrequency,
+    statBoost: bodyResult.data.statBoost
   };
 
   habits.push(newHabit);
@@ -47,17 +49,17 @@ export function listHabits(req: Request, res: Response){
   const paramResult = ListHabitsParamSchema.safeParse(req.params);
   const queryResult = ListHabitsQuerySchema.safeParse(req.query);
 
-  const { petID } = paramResult.data;
+  const { petId } = paramResult.data;
   const { category } = queryResult.data;
 
-  const foundPet: Pet | undefined = pets.find(pet => pet.id === petID);
+  const foundPet: Pet | undefined = pets.find(pet => pet.id === petId!);
   if(!foundPet){
     res.status(404).json({ "message": "Pet not found" });
     return;
   }
 
   let filteredList = habits;
-  filteredList = filteredList.filter(habit => habit.petID === petID!);
+  filteredList = filteredList.filter(habit => habit.petId === petId!);
   
   if(category != undefined){
     filteredList = filteredList.filter(habit => habit.category === category);

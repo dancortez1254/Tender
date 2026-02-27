@@ -14,19 +14,22 @@ import { listPets } from './controllers/pets.js';
 app.get('/pets', listPets);
 
 import { getPet } from './controllers/pets.js';
-app.get('/pets/:petID', getPet);
+app.get('/pets/:petId', getPet);
 
 import { updatePetName } from './controllers/pets.js';
-app.put('/pets/:petID', updatePetName);
+app.put('/pets/:petId', updatePetName);
 
 import { deletePet } from './controllers/pets.js';
-app.delete('/pets/:petID', deletePet);
+app.delete('/pets/:petId', deletePet);
 
 import { createHabit } from './controllers/habits.js';
-app.post('/pets/:petID/habits', createHabit);
+app.post('/pets/:petId/habits', createHabit);
 
 import { listHabits } from './controllers/habits.js';
-app.get('/pets/:petID/habits', listHabits);
+app.get('/pets/:petId/habits', listHabits);
+
+import { logHabit } from './controllers/logs.js';
+app.post('/pets/:petId/logs', logHabit);
 
 // --- Your routes will go above this line ---
 

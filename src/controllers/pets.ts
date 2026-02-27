@@ -1,12 +1,13 @@
 import { differenceInMilliseconds } from 'date-fns';
 import { Request, Response } from 'express';
 import { Pet } from '../entities/Pet.js';
+import { logs } from '../models/logs.js';
 import { petIdCounter, pets } from '../models/pets.js';
 import { NEGLECT_THRESHOLD_MS } from '../utils/config.js';
 import {
   CreatePetSchema,
   DeletePetSchema,
-  GetPetIDSchema, GetPetSchema, UpdatePetNameBodySchema,
+  GetPetIdSchema, GetPetSchema, UpdatePetNameBodySchema,
   UpdatePetNameParamSchema
 } from '../validators/pets.js';
 
@@ -15,7 +16,22 @@ export function getStage(pet: Pet, include_emoji=true){
     if(differenceInMilliseconds(new Date(), pet.lastFedAt) > NEGLECT_THRESHOLD_MS){
       return ["cooked", "🍗"];
     }
-    return ["Egg", "🥚"];
+
+    let filteredList = logs;
+    const num_logs = filteredList.filter(log => log.petId === pet.id).length
+    if(num_logs === 0){
+      return ["Egg", "🥚"];
+    }
+    else if(num_logs <= 4){
+      return ["Hatching", "🐣"]
+    }
+    else if(num_logs <= 14){
+      return ["Growing", "🐥"]
+    }
+    else{
+      return ["Grown", "🐓"]
+    }
+
   }
   if(differenceInMilliseconds(new Date(), pet.lastFedAt) > NEGLECT_THRESHOLD_MS){
     return ["cooked"];
@@ -64,11 +80,11 @@ export function listPets(req: Request, res: Response): void{
 }
 
 export function getPet(req: Request, res: Response): void{
-  const result = GetPetIDSchema.safeParse(req.params);
+  const result = GetPetIdSchema.safeParse(req.params);
 
-  const { petID } = result.data;
+  const { petId } = result.data;
 
-  const foundPet: Pet | undefined = pets.find(pet => pet.id === petID);
+  const foundPet: Pet | undefined = pets.find(pet => pet.id === petId);
 
   if(!foundPet){
     res.status(404).json({ "message": "Pet not found" });
@@ -88,9 +104,9 @@ export function updatePetName(req: Request, res: Response): void{
   const paramResult = UpdatePetNameParamSchema.safeParse(req.params);
 
   const { newName } = bodyResult.data;
-  const { petID } = paramResult.data;
+  const { petId } = paramResult.data;
 
-  const foundPet: Pet | undefined = pets.find(pet => pet.id === petID);
+  const foundPet: Pet | undefined = pets.find(pet => pet.id === petId);
 
   if(!foundPet){
     res.status(404).json({ "message": "Pet not found" });
@@ -106,9 +122,9 @@ export function deletePet(req: Request, res: Response): void{
   
   const result = DeletePetSchema.safeParse(req.params);
 
-  const { petID } = result.data;
+  const { petId } = result.data;
 
-  const foundPet: Pet | undefined = pets.find(pet => pet.id === petID);
+  const foundPet: Pet | undefined = pets.find(pet => pet.id === petId);
   if(!foundPet){
     res.status(404).json({ "message": "Pet not found" });
     return;
